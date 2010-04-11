@@ -2,7 +2,7 @@
     'target_defaults': {
         'include_dirs': [
             'include',
-            '../libsfz/include',
+            '<(DEPTH)/ext/libsfz/include',
         ],
         'xcode_settings': {
             'GCC_TREAT_WARNINGS_AS_ERRORS': 'YES',
@@ -18,6 +18,21 @@
     },
     'targets': [
         {
+            'target_name': 'check-deps',
+            'type': 'none',
+            'actions': [
+                {
+                    'action_name': 'check-deps',
+                    'inputs': [ ],
+                    'outputs': [ ],
+                    'action': [
+                        './scripts/check-deps.sh',
+                        '<(DEPTH)',
+                    ],
+                },
+            ],
+        },
+        {
             'target_name': 'librgos',
             'type': '<(library)',
             'sources': [
@@ -26,7 +41,8 @@
                 'src/rgos/Serialize.cpp',
             ],
             'dependencies': [
-                '../libsfz/libsfz.gyp:libsfz',
+                ':check-deps',
+                '<(DEPTH)/ext/libsfz/libsfz.gyp:libsfz',
             ],
         },
     ],
