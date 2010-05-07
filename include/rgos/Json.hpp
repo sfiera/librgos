@@ -29,7 +29,6 @@ class Json {
     ~Json();
 
     void accept(JsonVisitor* visitor) const;
-    void print_to(sfz::String* out) const;
 
   private:
     class Value;
@@ -46,6 +45,8 @@ class Json {
 
     // ALLOW_COPY_AND_ASSIGN
 };
+
+void print_to(sfz::PrintTarget out, const Json& json);
 
 }  // namespace rgos
 

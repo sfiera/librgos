@@ -6,14 +6,18 @@
 #ifndef RGOS_SERIALIZE_HPP_
 #define RGOS_SERIALIZE_HPP_
 
-namespace sfz { class FormatItem; }
+#include "sfz/PrintTarget.hpp"
 
 namespace rgos {
 
 class Json;
 
-sfz::FormatItem serialize(const Json& value);
-sfz::FormatItem pretty_print(const Json& value);
+struct JsonPrettyPrinter;
+
+JsonPrettyPrinter pretty_print(const Json& value);
+
+struct JsonPrettyPrinter { const Json& json; };
+void print_to(sfz::PrintTarget out, const JsonPrettyPrinter& j);
 
 }  // namespace rgos
 

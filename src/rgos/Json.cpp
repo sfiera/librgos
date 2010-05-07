@@ -12,7 +12,6 @@
 #include "sfz/Macros.hpp"
 #include "sfz/SmartPtr.hpp"
 
-using sfz::FormatItem;
 using sfz::ReferenceCounted;
 using sfz::StringKey;
 using sfz::scoped_ptr;
@@ -153,10 +152,6 @@ Json::~Json() { }
 
 void Json::accept(JsonVisitor* visitor) const {
     _value->accept(visitor);
-}
-
-void Json::print_to(sfz::String* out) const {
-    serialize(*this).print_to(out);
 }
 
 }  // namespace rgos
