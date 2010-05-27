@@ -19,7 +19,6 @@ using sfz::PrintItem;
 using sfz::PrintTarget;
 using sfz::StringKey;
 using sfz::StringPiece;
-using sfz::ascii_encoding;
 using sfz::quote;
 using std::map;
 using std::vector;
