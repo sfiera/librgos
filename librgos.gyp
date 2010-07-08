@@ -17,6 +17,14 @@
                 ':check-deps',
                 '<(DEPTH)/ext/libsfz/libsfz.gyp:libsfz',
             ],
+            'direct_dependent_settings': {
+                'include_dirs': [
+                    'include',
+                ],
+            },
+            'export_dependent_settings': [
+                '<(DEPTH)/ext/libsfz/libsfz.gyp:libsfz',
+            ],
         },
     ],
 }
