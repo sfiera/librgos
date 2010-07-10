@@ -1,9 +1,4 @@
 {
-    'target_defaults': {
-        'include_dirs': [
-            'include',
-        ],
-    },
     'targets': [
         {
             'target_name': 'librgos',
@@ -12,6 +7,9 @@
                 'src/rgos/Json.cpp',
                 'src/rgos/JsonVisitor.cpp',
                 'src/rgos/Serialize.cpp',
+            ],
+            'include_dirs': [
+                'include',
             ],
             'dependencies': [
                 ':check-deps',
@@ -24,6 +22,19 @@
             },
             'export_dependent_settings': [
                 '<(DEPTH)/ext/libsfz/libsfz.gyp:libsfz',
+            ],
+        },
+        {
+            'target_name': 'librgos-tests',
+            'type': 'executable',
+            'sources': [
+                'src/rgos/Json.test.cpp',
+                'src/rgos/Serialize.test.cpp',
+            ],
+            'dependencies': [
+                ':check-deps',
+                ':librgos',
+                '<(DEPTH)/ext/googlemock/googlemock.gyp:gmock_main',
             ],
         },
     ],

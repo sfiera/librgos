@@ -8,8 +8,7 @@
 
 #include <map>
 #include <vector>
-#include "sfz/ReferenceCounted.hpp"
-#include "sfz/String.hpp"
+#include "sfz/sfz.hpp"
 
 namespace rgos {
 
@@ -19,7 +18,7 @@ class Json {
   public:
     static Json object(const std::map<sfz::StringKey, Json>& value);
     static Json array(const std::vector<Json>& value);
-    static Json string(const sfz::String& value);
+    static Json string(const sfz::PrintItem& value);
     static Json number(double value);
     static Json bool_(bool value);
     static Json null();

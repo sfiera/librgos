@@ -58,7 +58,7 @@ class Json::Array : public Json::Value {
 
 class Json::String : public Json::Value {
   public:
-    explicit String(const sfz::String& s)
+    explicit String(const sfz::PrintItem& s)
         : _value(s) { }
 
     virtual void accept(JsonVisitor* visitor) const {
@@ -121,7 +121,7 @@ Json Json::array(const vector<Json>& value) {
     return Json(new Array(value));
 }
 
-Json Json::string(const sfz::String& value) {
+Json Json::string(const sfz::PrintItem& value) {
     return Json(new String(value));
 }
 
