@@ -6,7 +6,7 @@
 #ifndef RGOS_SERIALIZE_HPP_
 #define RGOS_SERIALIZE_HPP_
 
-#include "sfz/PrintTarget.hpp"
+#include <sfz/sfz.hpp>
 
 namespace rgos {
 

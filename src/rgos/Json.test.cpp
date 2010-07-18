@@ -5,10 +5,10 @@
 
 #include "rgos/Json.hpp"
 
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+#include <sfz/sfz.hpp>
 #include "rgos/JsonVisitor.hpp"
-#include "sfz/sfz.hpp"
 
 using sfz::StringKey;
 using sfz::StringPiece;

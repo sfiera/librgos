@@ -6,14 +6,9 @@
 #include "rgos/Serialize.hpp"
 
 #include <math.h>
+#include <sfz/sfz.hpp>
 #include "rgos/Json.hpp"
 #include "rgos/JsonVisitor.hpp"
-#include "sfz/Foreach.hpp"
-#include "sfz/Format.hpp"
-#include "sfz/Formatter.hpp"
-#include "sfz/Macros.hpp"
-#include "sfz/String.hpp"
-#include "sfz/StringUtilities.hpp"
 
 using sfz::PrintItem;
 using sfz::PrintTarget;

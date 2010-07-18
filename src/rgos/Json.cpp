@@ -6,11 +6,9 @@
 #include "rgos/Json.hpp"
 
 #include <math.h>
+#include <sfz/sfz.hpp>
 #include "rgos/JsonVisitor.hpp"
 #include "rgos/Serialize.hpp"
-#include "sfz/Formatter.hpp"
-#include "sfz/Macros.hpp"
-#include "sfz/SmartPtr.hpp"
 
 using sfz::ReferenceCounted;
 using sfz::StringKey;

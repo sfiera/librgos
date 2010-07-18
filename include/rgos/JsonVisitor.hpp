@@ -8,7 +8,7 @@
 
 #include <map>
 #include <vector>
-#include "sfz/String.hpp"
+#include <sfz/sfz.hpp>
 
 namespace rgos {
 
