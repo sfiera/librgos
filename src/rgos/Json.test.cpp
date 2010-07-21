@@ -57,7 +57,7 @@ typedef ::testing::Test JsonTest;
 TEST_F(JsonTest, NullTest) {
     StrictMock<MockJsonVisitor> visitor;
     EXPECT_CALL(visitor, visit_null());
-    Json::null().accept(&visitor);
+    Json().accept(&visitor);
 }
 
 TEST_F(JsonTest, StringTest) {

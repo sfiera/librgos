@@ -98,18 +98,6 @@ class Json::Bool : public Json::Value {
     DISALLOW_COPY_AND_ASSIGN(Bool);
 };
 
-class Json::Null : public Json::Value {
-  public:
-    explicit Null() { }
-
-    virtual void accept(JsonVisitor* visitor) const {
-        visitor->visit_null();
-    }
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(Null);
-};
-
 Json Json::object(const StringMap<Json>& value) {
     return Json(new Object(value));
 }
@@ -130,9 +118,7 @@ Json Json::bool_(bool value) {
     return Json(new Bool(value));
 }
 
-Json Json::null() {
-    return Json(new Null);
-}
+Json::Json() { }
 
 Json::Json(Json::Value* value)
     : _value(value) { }
@@ -148,7 +134,11 @@ Json& Json::operator=(const Json& other) {
 Json::~Json() { }
 
 void Json::accept(JsonVisitor* visitor) const {
-    _value->accept(visitor);
+    if (_value.get()) {
+        _value->accept(visitor);
+    } else {
+        visitor->visit_null();
+    }
 }
 
 }  // namespace rgos

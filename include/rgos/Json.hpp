@@ -22,8 +22,8 @@ class Json {
     static Json string(const sfz::PrintItem& value);
     static Json number(double value);
     static Json bool_(bool value);
-    static Json null();
 
+    Json();
     Json(const Json& other);
     Json& operator=(const Json& other);
     ~Json();

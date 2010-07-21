@@ -37,7 +37,7 @@ MATCHER_P(SerializesTo, representation, "") {
 }
 
 TEST_F(SerializeTest, NullTest) {
-    EXPECT_THAT(Json::null(), SerializesTo("null"));
+    EXPECT_THAT(Json(), SerializesTo("null"));
 }
 
 TEST_F(SerializeTest, StringTest) {
