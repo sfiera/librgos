@@ -142,11 +142,11 @@ typename StringMap<T, Compare>::mapped_type& StringMap<T, Compare>::operator[](
         const key_type& key) {
     wrapped_iterator it = _map.find(key);
     if (it == _map.end()) {
-        sfz::linked_ptr<WrappedValue> value(new WrappedValue(key, value));
-        _map.insert(std::make_pair(value->key_storage, value));
-        return value->pair.second;
+        sfz::linked_ptr<WrappedValue> inserted(new WrappedValue(key));
+        _map.insert(typename internal_map::value_type(inserted->key_storage, inserted));
+        return inserted->pair.second;
     }
-    return it->pair.second;
+    return it->second->pair.second;
 }
 
 template <typename T, typename Compare>
