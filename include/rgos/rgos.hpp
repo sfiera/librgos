@@ -9,5 +9,6 @@
 #include <rgos/Json.hpp>
 #include <rgos/JsonVisitor.hpp>
 #include <rgos/Serialize.hpp>
+#include <rgos/StringMap.hpp>
 
 #endif  // RGOS_RGOS_HPP_

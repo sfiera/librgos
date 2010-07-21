@@ -11,7 +11,6 @@
 #include "rgos/Json.hpp"
 
 using sfz::CString;
-using sfz::StringKey;
 using sfz::StringPiece;
 using sfz::array_range;
 using sfz::format;
@@ -72,12 +71,12 @@ TEST_F(SerializeTest, NonEmptyArrayTest) {
 }
 
 TEST_F(SerializeTest, EmptyObjectTest) {
-    map<StringKey, Json> o;
+    StringMap<Json> o;
     EXPECT_THAT(Json::object(o), SerializesTo("{}"));
 }
 
 TEST_F(SerializeTest, NonEmptyObjectTest) {
-    map<StringKey, Json> o;
+    StringMap<Json> o;
     o.insert(make_pair("one", Json::number(1.0)));
     o.insert(make_pair("two", Json::number(2.0)));
     o.insert(make_pair("three", Json::number(3.0)));
@@ -116,13 +115,13 @@ TEST_F(SerializeTest, ComplexObjectTest) {
 
     vector<Json> tracks;
     foreach (it, array_range(kAlbum.tracks)) {
-        map<StringKey, Json> track;
+        StringMap<Json> track;
         track.insert(make_pair("title", Json::string(it->title)));
         track.insert(make_pair("length", Json::number(it->length)));
         tracks.push_back(Json::object(track));
     }
 
-    map<StringKey, Json> album;
+    StringMap<Json> album;
     album.insert(make_pair("album", Json::string(kAlbum.album)));
     album.insert(make_pair("artist", Json::string(kAlbum.artist)));
     album.insert(make_pair("compilation", Json::bool_(kAlbum.compilation)));

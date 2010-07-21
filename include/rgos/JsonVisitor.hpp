@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include <sfz/sfz.hpp>
+#include <rgos/StringMap.hpp>
 
 namespace rgos {
 
@@ -18,7 +19,7 @@ class JsonVisitor {
   public:
     virtual ~JsonVisitor();
 
-    virtual void visit_object(const std::map<sfz::StringKey, Json>& value) = 0;
+    virtual void visit_object(const StringMap<Json>& value) = 0;
     virtual void visit_array(const std::vector<Json>& value) = 0;
     virtual void visit_string(const sfz::StringPiece& value) = 0;
     virtual void visit_number(double value) = 0;
@@ -28,7 +29,7 @@ class JsonVisitor {
 
 class JsonDefaultVisitor : public JsonVisitor {
   public:
-    virtual void visit_object(const std::map<sfz::StringKey, Json>& value);
+    virtual void visit_object(const StringMap<Json>& value);
     virtual void visit_array(const std::vector<Json>& value);
     virtual void visit_string(const sfz::StringPiece& value);
     virtual void visit_number(double value);

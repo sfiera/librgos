@@ -12,7 +12,6 @@
 
 using sfz::PrintItem;
 using sfz::PrintTarget;
-using sfz::StringKey;
 using sfz::StringPiece;
 using sfz::quote;
 using std::map;
@@ -26,7 +25,7 @@ class SerializerVisitor : public JsonVisitor {
   public:
     explicit SerializerVisitor(PrintTarget out);
 
-    virtual void visit_object(const map<StringKey, Json>& value);
+    virtual void visit_object(const StringMap<Json>& value);
     virtual void visit_array(const vector<Json>& value);
     virtual void visit_string(const StringPiece& value);
     virtual void visit_number(double value);
@@ -44,7 +43,7 @@ class PrettyPrinterVisitor : public SerializerVisitor {
   public:
     explicit PrettyPrinterVisitor(PrintTarget out);
 
-    virtual void visit_object(const map<StringKey, Json>& value);
+    virtual void visit_object(const StringMap<Json>& value);
     virtual void visit_array(const vector<Json>& value);
 
   private:
@@ -56,7 +55,7 @@ class PrettyPrinterVisitor : public SerializerVisitor {
 SerializerVisitor::SerializerVisitor(PrintTarget out)
     : _out(out) { }
 
-void SerializerVisitor::visit_object(const map<StringKey, Json>& value) {
+void SerializerVisitor::visit_object(const StringMap<Json>& value) {
     _out.append(1, '{');
     if (value.size() > 0) {
         foreach (it, value) {
@@ -104,7 +103,7 @@ PrettyPrinterVisitor::PrettyPrinterVisitor(PrintTarget out)
     : SerializerVisitor(out),
       _depth(0) { }
 
-void PrettyPrinterVisitor::visit_object(const map<StringKey, Json>& value) {
+void PrettyPrinterVisitor::visit_object(const StringMap<Json>& value) {
     _out.append(1, '{');
     if (value.size() > 0) {
         _depth += 2;

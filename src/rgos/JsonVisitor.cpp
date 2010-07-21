@@ -6,7 +6,6 @@
 #include "rgos/JsonVisitor.hpp"
 
 using sfz::String;
-using sfz::StringKey;
 using sfz::StringPiece;
 using std::map;
 using std::vector;
@@ -15,7 +14,7 @@ namespace rgos {
 
 JsonVisitor::~JsonVisitor() { }
 
-void JsonDefaultVisitor::visit_object(const map<StringKey, Json>& value) {
+void JsonDefaultVisitor::visit_object(const StringMap<Json>& value) {
     visit_default("object");
 }
 

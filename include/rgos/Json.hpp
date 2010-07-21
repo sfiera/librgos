@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include <sfz/sfz.hpp>
+#include <rgos/StringMap.hpp>
 
 namespace rgos {
 
@@ -16,7 +17,7 @@ class JsonVisitor;
 
 class Json {
   public:
-    static Json object(const std::map<sfz::StringKey, Json>& value);
+    static Json object(const StringMap<Json>& value);
     static Json array(const std::vector<Json>& value);
     static Json string(const sfz::PrintItem& value);
     static Json number(double value);
@@ -40,7 +41,7 @@ class Json {
 
     Json(Value* value);
 
-    sfz::RefPtr<const Value> _value;
+    sfz::scoped_ref<const Value> _value;
 
     // ALLOW_COPY_AND_ASSIGN
 };

@@ -10,7 +10,6 @@
 #include <sfz/sfz.hpp>
 #include "rgos/JsonVisitor.hpp"
 
-using sfz::StringKey;
 using sfz::StringPiece;
 using sfz::array_range;
 using std::make_pair;
@@ -28,7 +27,7 @@ class MockJsonVisitor : public JsonVisitor {
     MOCK_METHOD0(enter_object, void());
     MOCK_METHOD1(object_key, void(const StringPiece&));
     MOCK_METHOD0(exit_object, void());
-    void visit_object(const map<StringKey, Json>& value) {
+    void visit_object(const StringMap<Json>& value) {
         enter_object();
         foreach (it, value) {
             object_key(it->first);
@@ -117,7 +116,7 @@ TEST_F(JsonTest, EmptyObjectTest) {
         EXPECT_CALL(visitor, enter_object());
         EXPECT_CALL(visitor, exit_object());
     }
-    map<StringKey, Json> o;
+    StringMap<Json> o;
     Json::object(o).accept(&visitor);
 }
 
@@ -139,7 +138,7 @@ TEST_F(JsonTest, NonEmptyObjectTest) {
         EXPECT_CALL(visitor, visit_number(2.0));
         EXPECT_CALL(visitor, exit_object());
     }
-    map<StringKey, Json> o;
+    StringMap<Json> o;
     o.insert(make_pair("one", Json::number(1.0)));
     o.insert(make_pair("two", Json::number(2.0)));
     o.insert(make_pair("three", Json::number(3.0)));
@@ -220,13 +219,13 @@ TEST_F(JsonTest, ComplexObjectTest) {
 
     vector<Json> tracks;
     foreach (it, array_range(kAlbum.tracks)) {
-        map<StringKey, Json> track;
+        StringMap<Json> track;
         track.insert(make_pair("title", Json::string(it->title)));
         track.insert(make_pair("length", Json::number(it->length)));
         tracks.push_back(Json::object(track));
     }
 
-    map<StringKey, Json> album;
+    StringMap<Json> album;
     album.insert(make_pair("album", Json::string(kAlbum.album)));
     album.insert(make_pair("artist", Json::string(kAlbum.artist)));
     album.insert(make_pair("compilation", Json::bool_(kAlbum.compilation)));

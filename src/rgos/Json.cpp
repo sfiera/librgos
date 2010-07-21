@@ -11,7 +11,6 @@
 #include "rgos/Serialize.hpp"
 
 using sfz::ReferenceCounted;
-using sfz::StringKey;
 using sfz::scoped_ptr;
 using sfz::quote;
 using std::map;
@@ -26,7 +25,7 @@ class Json::Value : public ReferenceCounted {
 
 class Json::Object : public Json::Value {
   public:
-    Object(const map<StringKey, Json>& value)
+    Object(const StringMap<Json>& value)
         : _value(value) { }
 
     virtual void accept(JsonVisitor* visitor) const {
@@ -34,7 +33,7 @@ class Json::Object : public Json::Value {
     }
 
   private:
-    const map<StringKey, Json> _value;
+    const StringMap<Json> _value;
 
     DISALLOW_COPY_AND_ASSIGN(Object);
 };
@@ -111,7 +110,7 @@ class Json::Null : public Json::Value {
     DISALLOW_COPY_AND_ASSIGN(Null);
 };
 
-Json Json::object(const map<StringKey, Json>& value) {
+Json Json::object(const StringMap<Json>& value) {
     return Json(new Object(value));
 }
 
