@@ -12,7 +12,6 @@
                 'include',
             ],
             'dependencies': [
-                ':check-deps',
                 '<(DEPTH)/ext/libsfz/libsfz.gyp:libsfz',
             ],
             'direct_dependent_settings': {
@@ -32,7 +31,6 @@
                 'src/rgos/Serialize.test.cpp',
             ],
             'dependencies': [
-                ':check-deps',
                 ':librgos',
                 '<(DEPTH)/ext/googlemock/googlemock.gyp:gmock_main',
             ],
