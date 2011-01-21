@@ -6,7 +6,7 @@
 #include "rgos/JsonVisitor.hpp"
 
 using sfz::String;
-using sfz::StringPiece;
+using sfz::StringSlice;
 using std::map;
 using std::vector;
 
@@ -22,7 +22,7 @@ void JsonDefaultVisitor::visit_array(const vector<Json>& value) {
     visit_default("array");
 }
 
-void JsonDefaultVisitor::visit_string(const StringPiece& value) {
+void JsonDefaultVisitor::visit_string(const StringSlice& value) {
     visit_default("string");
 }
 

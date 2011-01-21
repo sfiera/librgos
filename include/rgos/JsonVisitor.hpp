@@ -21,7 +21,7 @@ class JsonVisitor {
 
     virtual void visit_object(const StringMap<Json>& value) = 0;
     virtual void visit_array(const std::vector<Json>& value) = 0;
-    virtual void visit_string(const sfz::StringPiece& value) = 0;
+    virtual void visit_string(const sfz::StringSlice& value) = 0;
     virtual void visit_number(double value) = 0;
     virtual void visit_bool(bool value) = 0;
     virtual void visit_null() = 0;
@@ -31,7 +31,7 @@ class JsonDefaultVisitor : public JsonVisitor {
   public:
     virtual void visit_object(const StringMap<Json>& value);
     virtual void visit_array(const std::vector<Json>& value);
-    virtual void visit_string(const sfz::StringPiece& value);
+    virtual void visit_string(const sfz::StringSlice& value);
     virtual void visit_number(double value);
     virtual void visit_bool(bool value);
     virtual void visit_null();

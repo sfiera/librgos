@@ -13,12 +13,12 @@
 
 namespace rgos {
 
-struct StringPieceLess;
+struct StringSliceLess;
 
-template <typename T, typename Compare = StringPieceLess>
+template <typename T, typename Compare = StringSliceLess>
 class StringMap {
   public:
-    typedef sfz::StringPiece                        key_type;
+    typedef sfz::StringSlice                        key_type;
     typedef T                                       mapped_type;
     typedef std::pair<const key_type, mapped_type>  value_type;
     typedef size_t                                  size_type;
@@ -57,19 +57,19 @@ class StringMap {
 
   private:
     struct WrappedValue;
-    typedef std::map<sfz::StringPiece, sfz::linked_ptr<WrappedValue>, Compare> internal_map;
+    typedef std::map<sfz::StringSlice, sfz::linked_ptr<WrappedValue>, Compare> internal_map;
     typedef typename internal_map::iterator wrapped_iterator;
     typedef typename internal_map::const_iterator wrapped_const_iterator;
 
     struct WrappedValue {
         const sfz::String key_storage;
-        std::pair<const sfz::StringPiece, mapped_type> pair;
+        std::pair<const sfz::StringSlice, mapped_type> pair;
 
-        WrappedValue(const sfz::StringPiece& k)
+        WrappedValue(const sfz::StringSlice& k)
             : key_storage(k),
               pair(key_storage, mapped_type()) { }
 
-        WrappedValue(const sfz::StringPiece& k, const mapped_type& v)
+        WrappedValue(const sfz::StringSlice& k, const mapped_type& v)
             : key_storage(k),
               pair(key_storage, v) { }
 
@@ -132,8 +132,8 @@ class StringMap<T, Compare>::const_iterator : public iterator_base<wrapped_const
 
 template <typename T, typename Compare>
 StringMap<T, Compare>::StringMap(const StringMap& other) {
-    foreach (it, other) {
-        insert(*it);
+    foreach (const value_type& item, other) {
+        insert(item);
     }
 }
 
@@ -152,7 +152,7 @@ typename StringMap<T, Compare>::mapped_type& StringMap<T, Compare>::operator[](
 template <typename T, typename Compare>
 std::pair<typename StringMap<T, Compare>::iterator, bool> StringMap<T, Compare>::insert(
         const value_type& pair) {
-    const sfz::StringPiece& key = pair.first;
+    const sfz::StringSlice& key = pair.first;
     const mapped_type& value = pair.second;
     wrapped_iterator it = _map.find(key);
     if (it == _map.end()) {
@@ -164,9 +164,9 @@ std::pair<typename StringMap<T, Compare>::iterator, bool> StringMap<T, Compare>:
     }
 }
 
-struct StringPieceLess {
-    bool operator()(const sfz::StringPiece& lhs, const sfz::StringPiece& rhs) const {
-        for (sfz::StringPiece::const_iterator it = lhs.begin(), jt = rhs.begin(),
+struct StringSliceLess {
+    bool operator()(const sfz::StringSlice& lhs, const sfz::StringSlice& rhs) const {
+        for (sfz::StringSlice::const_iterator it = lhs.begin(), jt = rhs.begin(),
                 it_end = rhs.end(), jt_end = rhs.end(); true; ++it, ++jt) {
             if (jt == jt_end) {
                 return false;

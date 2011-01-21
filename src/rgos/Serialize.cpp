@@ -12,7 +12,7 @@
 
 using sfz::PrintItem;
 using sfz::PrintTarget;
-using sfz::StringPiece;
+using sfz::StringSlice;
 using sfz::quote;
 using std::map;
 using std::vector;
@@ -27,7 +27,7 @@ class SerializerVisitor : public JsonVisitor {
 
     virtual void visit_object(const StringMap<Json>& value);
     virtual void visit_array(const vector<Json>& value);
-    virtual void visit_string(const StringPiece& value);
+    virtual void visit_string(const StringSlice& value);
     virtual void visit_number(double value);
     virtual void visit_bool(bool value);
     virtual void visit_null();
@@ -56,34 +56,40 @@ SerializerVisitor::SerializerVisitor(PrintTarget out)
     : _out(out) { }
 
 void SerializerVisitor::visit_object(const StringMap<Json>& value) {
-    _out.append(1, '{');
+    _out.push(1, '{');
     if (value.size() > 0) {
-        foreach (it, value) {
-            if (it != value.begin()) {
-                _out.append(1, ',');
+        bool first = true;
+        foreach (const StringMap<Json>::value_type& item, value) {
+            if (first) {
+                first = false;
+            } else {
+                _out.push(1, ',');
             }
-            print_to(_out, quote(it->first));
-            _out.append(1, ':');
-            it->second.accept(this);
+            print_to(_out, quote(item.first));
+            _out.push(1, ':');
+            item.second.accept(this);
         }
     }
-    _out.append(1, '}');
+    _out.push(1, '}');
 }
 
 void SerializerVisitor::visit_array(const vector<Json>& value) {
-    _out.append(1, '[');
+    _out.push(1, '[');
     if (value.size() > 0) {
-        foreach (it, value) {
-            if (it != value.begin()) {
-                _out.append(1, ',');
+        bool first = true;
+        foreach (const Json& item, value) {
+            if (first) {
+                first = false;
+            } else {
+                _out.push(1, ',');
             }
-            it->accept(this);
+            item.accept(this);
         }
     }
-    _out.append(1, ']');
+    _out.push(1, ']');
 }
 
-void SerializerVisitor::visit_string(const StringPiece& value) {
+void SerializerVisitor::visit_string(const StringSlice& value) {
     print_to(_out, quote(value));
 }
 
@@ -96,7 +102,7 @@ void SerializerVisitor::visit_bool(bool value) {
 }
 
 void SerializerVisitor::visit_null() {
-    _out.append("null");
+    _out.push("null");
 }
 
 PrettyPrinterVisitor::PrettyPrinterVisitor(PrintTarget out)
@@ -104,43 +110,49 @@ PrettyPrinterVisitor::PrettyPrinterVisitor(PrintTarget out)
       _depth(0) { }
 
 void PrettyPrinterVisitor::visit_object(const StringMap<Json>& value) {
-    _out.append(1, '{');
+    _out.push(1, '{');
     if (value.size() > 0) {
         _depth += 2;
-        foreach (it, value) {
-            if (it != value.begin()) {
-                _out.append(1, ',');
+        bool first = true;
+        foreach (const StringMap<Json>::value_type& item, value) {
+            if (first) {
+                first = false;
+            } else {
+                _out.push(1, ',');
             }
-            _out.append(1, '\n');
-            _out.append(_depth, ' ');
-            print_to(_out, quote(it->first));
-            _out.append(": ");
-            it->second.accept(this);
+            _out.push(1, '\n');
+            _out.push(_depth, ' ');
+            print_to(_out, quote(item.first));
+            _out.push(": ");
+            item.second.accept(this);
         }
         _depth -= 2;
-        _out.append(1, '\n');
-        _out.append(_depth, ' ');
+        _out.push(1, '\n');
+        _out.push(_depth, ' ');
     }
-    _out.append(1, '}');
+    _out.push(1, '}');
 }
 
 void PrettyPrinterVisitor::visit_array(const vector<Json>& value) {
-    _out.append(1, '[');
+    _out.push(1, '[');
     if (value.size() > 0) {
         _depth += 2;
-        foreach (it, value) {
-            if (it != value.begin()) {
-                _out.append(1, ',');
+        bool first = true;
+        foreach (const Json& item, value) {
+            if (first) {
+                first = false;
+            } else {
+                _out.push(1, ',');
             }
-            _out.append(1, '\n');
-            _out.append(_depth, ' ');
-            it->accept(this);
+            _out.push(1, '\n');
+            _out.push(_depth, ' ');
+            item.accept(this);
         }
         _depth -= 2;
-        _out.append(1, '\n');
-        _out.append(_depth, ' ');
+        _out.push(1, '\n');
+        _out.push(_depth, ' ');
     }
-    _out.append(1, ']');
+    _out.push(1, ']');
 }
 
 }  // namespace

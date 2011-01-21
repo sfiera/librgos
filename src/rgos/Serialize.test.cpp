@@ -11,8 +11,7 @@
 #include "rgos/Json.hpp"
 
 using sfz::CString;
-using sfz::StringPiece;
-using sfz::array_range;
+using sfz::StringSlice;
 using sfz::format;
 using std::make_pair;
 using std::map;
@@ -91,12 +90,12 @@ TEST_F(SerializeTest, NonEmptyObjectTest) {
 
 struct Album {
     struct Track {
-        const StringPiece title;
+        const StringSlice title;
         double length;
     };
 
-    const StringPiece album;
-    const StringPiece artist;
+    const StringSlice album;
+    const StringSlice artist;
     bool compilation;
     Track tracks[3];
 };
@@ -114,11 +113,11 @@ TEST_F(SerializeTest, ComplexObjectTest) {
     };
 
     vector<Json> tracks;
-    foreach (it, array_range(kAlbum.tracks)) {
-        StringMap<Json> track;
-        track.insert(make_pair("title", Json::string(it->title)));
-        track.insert(make_pair("length", Json::number(it->length)));
-        tracks.push_back(Json::object(track));
+    foreach (const Album::Track& track, kAlbum.tracks) {
+        StringMap<Json> object;
+        object.insert(make_pair("title", Json::string(track.title)));
+        object.insert(make_pair("length", Json::number(track.length)));
+        tracks.push_back(Json::object(object));
     }
 
     StringMap<Json> album;

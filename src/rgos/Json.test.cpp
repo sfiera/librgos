@@ -10,8 +10,7 @@
 #include <sfz/sfz.hpp>
 #include "rgos/JsonVisitor.hpp"
 
-using sfz::StringPiece;
-using sfz::array_range;
+using sfz::StringSlice;
 using std::make_pair;
 using std::map;
 using std::vector;
@@ -25,13 +24,13 @@ namespace {
 class MockJsonVisitor : public JsonVisitor {
   public:
     MOCK_METHOD0(enter_object, void());
-    MOCK_METHOD1(object_key, void(const StringPiece&));
+    MOCK_METHOD1(object_key, void(const StringSlice&));
     MOCK_METHOD0(exit_object, void());
     void visit_object(const StringMap<Json>& value) {
         enter_object();
-        foreach (it, value) {
-            object_key(it->first);
-            it->second.accept(this);
+        foreach (const StringMap<Json>::value_type& item, value) {
+            object_key(item.first);
+            item.second.accept(this);
         }
         exit_object();
     }
@@ -40,13 +39,13 @@ class MockJsonVisitor : public JsonVisitor {
     MOCK_METHOD0(exit_array, void());
     void visit_array(const vector<Json>& value) {
         enter_array();
-        foreach (it, value) {
-            it->accept(this);
+        foreach (const Json& item, value) {
+            item.accept(this);
         }
         exit_array();
     }
 
-    MOCK_METHOD1(visit_string, void(const StringPiece& value));
+    MOCK_METHOD1(visit_string, void(const StringSlice& value));
     MOCK_METHOD1(visit_number, void(double value));
     MOCK_METHOD1(visit_bool, void(bool value));
     MOCK_METHOD0(visit_null, void());
@@ -62,7 +61,7 @@ TEST_F(JsonTest, NullTest) {
 
 TEST_F(JsonTest, StringTest) {
     StrictMock<MockJsonVisitor> visitor;
-    EXPECT_CALL(visitor, visit_string(Eq<StringPiece>("Hello, world!")));
+    EXPECT_CALL(visitor, visit_string(Eq<StringSlice>("Hello, world!")));
     Json::string("Hello, world!").accept(&visitor);
 }
 
@@ -130,11 +129,11 @@ TEST_F(JsonTest, NonEmptyObjectTest) {
     {
         InSequence s;
         EXPECT_CALL(visitor, enter_object());
-        EXPECT_CALL(visitor, object_key(Eq<StringPiece>("one")));
+        EXPECT_CALL(visitor, object_key(Eq<StringSlice>("one")));
         EXPECT_CALL(visitor, visit_number(1.0));
-        EXPECT_CALL(visitor, object_key(Eq<StringPiece>("three")));
+        EXPECT_CALL(visitor, object_key(Eq<StringSlice>("three")));
         EXPECT_CALL(visitor, visit_number(3.0));
-        EXPECT_CALL(visitor, object_key(Eq<StringPiece>("two")));
+        EXPECT_CALL(visitor, object_key(Eq<StringSlice>("two")));
         EXPECT_CALL(visitor, visit_number(2.0));
         EXPECT_CALL(visitor, exit_object());
     }
@@ -166,12 +165,12 @@ TEST_F(JsonTest, NonEmptyObjectTest) {
 // }
 struct Album {
     struct Track {
-        const StringPiece title;
+        const StringSlice title;
         double length;
     };
 
-    const StringPiece album;
-    const StringPiece artist;
+    const StringSlice album;
+    const StringSlice artist;
     bool compilation;
     Track tracks[3];
 };
@@ -193,23 +192,23 @@ TEST_F(JsonTest, ComplexObjectTest) {
         InSequence s;
         EXPECT_CALL(visitor, enter_object());
 
-        EXPECT_CALL(visitor, object_key(Eq<StringPiece>("album")));
+        EXPECT_CALL(visitor, object_key(Eq<StringSlice>("album")));
         EXPECT_CALL(visitor, visit_string(kAlbum.album));
 
-        EXPECT_CALL(visitor, object_key(Eq<StringPiece>("artist")));
+        EXPECT_CALL(visitor, object_key(Eq<StringSlice>("artist")));
         EXPECT_CALL(visitor, visit_string(kAlbum.artist));
 
-        EXPECT_CALL(visitor, object_key(Eq<StringPiece>("compilation")));
+        EXPECT_CALL(visitor, object_key(Eq<StringSlice>("compilation")));
         EXPECT_CALL(visitor, visit_bool(kAlbum.compilation));
 
-        EXPECT_CALL(visitor, object_key(Eq<StringPiece>("tracks")));
+        EXPECT_CALL(visitor, object_key(Eq<StringSlice>("tracks")));
         EXPECT_CALL(visitor, enter_array());
-        foreach (it, array_range(kAlbum.tracks)) {
+        foreach (const Album::Track& track, kAlbum.tracks) {
             EXPECT_CALL(visitor, enter_object());
-            EXPECT_CALL(visitor, object_key(Eq<StringPiece>("length")));
-            EXPECT_CALL(visitor, visit_number(it->length));
-            EXPECT_CALL(visitor, object_key(Eq<StringPiece>("title")));
-            EXPECT_CALL(visitor, visit_string(it->title));
+            EXPECT_CALL(visitor, object_key(Eq<StringSlice>("length")));
+            EXPECT_CALL(visitor, visit_number(track.length));
+            EXPECT_CALL(visitor, object_key(Eq<StringSlice>("title")));
+            EXPECT_CALL(visitor, visit_string(track.title));
             EXPECT_CALL(visitor, exit_object());
         }
         EXPECT_CALL(visitor, exit_array());
@@ -218,11 +217,11 @@ TEST_F(JsonTest, ComplexObjectTest) {
     }
 
     vector<Json> tracks;
-    foreach (it, array_range(kAlbum.tracks)) {
-        StringMap<Json> track;
-        track.insert(make_pair("title", Json::string(it->title)));
-        track.insert(make_pair("length", Json::number(it->length)));
-        tracks.push_back(Json::object(track));
+    foreach (const Album::Track& track, kAlbum.tracks) {
+        StringMap<Json> object;
+        object.insert(make_pair("title", Json::string(track.title)));
+        object.insert(make_pair("length", Json::number(track.length)));
+        tracks.push_back(Json::object(object));
     }
 
     StringMap<Json> album;
